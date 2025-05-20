@@ -4,6 +4,6 @@
 Поллак Игорь harry1pacman
 Татьяна Ященко TatianaYash
  
-
+ 
 Техническое задание: [tech.md](tech.md)
 Структура базы данных: [BD_structure.md](BD_structure.md)
