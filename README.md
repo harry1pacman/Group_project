@@ -6,3 +6,4 @@
 
 
 Техническое задание: [tech.md](tech.md)
+Структура базы данных: [BD_structure.md](BD_structure.md)
