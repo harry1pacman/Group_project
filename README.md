@@ -2,7 +2,9 @@
 доска объявлений с игровыми предметами
 
 Поллак Игорь harry1pacman
-Татьяна Ященко TatianaYash
+Ященко Татьяна TatianaYash
+Усков Артем uskovdd
+Белорукова Юля juliawhitehand
 
 
 Техническое задание: [tech.md](tech.md)
