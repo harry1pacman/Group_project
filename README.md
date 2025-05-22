@@ -1,10 +1,10 @@
 Проект Студентов группы ЭУ-201
 доска объявлений с игровыми предметами
 
-Поллак Игорь harry1pacman
-Ященко Татьяна TatianaYash
-Усков Артем uskovdd
-Белорукова Юля juliawhitehand
+- Поллак Игорь harry1pacman
+- Ященко Татьяна TatianaYash
+- Усков Артем uskovdd
+- Белорукова Юля juliawhitehand
 
 
 Техническое задание: [TECH.md](TECH.md)
