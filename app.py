@@ -102,3 +102,93 @@ if __name__ == '__main__':
     create_schema()
     init_db()
     app.run(debug=True)
+
+
+    # Роуты для объявлений
+
+    # Получить все объявления
+    @app.route('/listings', methods=['GET'])
+    def get_all_listings():
+        db = get_db()
+        cursor = db.cursor()
+        cursor.execute("""
+            SELECT id, user_id, title, description, game, price, is_exchange, exchange_for, image_url, created_at, is_completed
+            FROM listings
+        """)
+        rows = cursor.fetchall()
+
+        result = []
+        for row in rows:
+            result.append({
+                "id": row[0],
+                "user_id": row[1],
+                "title": row[2],
+                "description": row[3],
+                "game": row[4],
+                "price": row[5],
+                "is_exchange": bool(row[6]),
+                "exchange_for": row[7],
+                "image_url": row[8],
+                "created_at": row[9],
+                "is_completed": bool(row[10])
+            })
+
+        return jsonify(result), 200
+
+
+    # Получить одно объявление
+    @app.route('/listing/<int:listing_id>', methods=['GET'])
+    def get_listing(listing_id):
+        db = get_db()
+        cursor = db.cursor()
+        cursor.execute("""
+            SELECT id, user_id, title, description, game, price, is_exchange, exchange_for, image_url, created_at, is_completed
+            FROM listings
+            WHERE id = ?
+        """, (listing_id,))
+        row = cursor.fetchone()
+
+        if row:
+            return jsonify({
+                "id": row[0],
+                "user_id": row[1],
+                "title": row[2],
+                "description": row[3],
+                "game": row[4],
+                "price": row[5],
+                "is_exchange": bool(row[6]),
+                "exchange_for": row[7],
+                "image_url": row[8],
+                "created_at": row[9],
+                "is_completed": bool(row[10])
+            }), 200
+        else:
+            return jsonify({"error": "Объявление не найдено"}), 404
+
+
+    # Добавить новое объявление
+    @app.route('/listing', methods=['POST'])
+    def create_listing():
+        data = request.get_json()
+        user_id = data.get('user_id')
+        title = data.get('title')
+        description = data.get('description')
+        game = data.get('game')
+        price = data.get('price')
+        is_exchange = data.get('is_exchange', False)
+        exchange_for = data.get('exchange_for')
+        image_url = data.get('image_url')
+
+        if not all([user_id, title, description, game]):
+            return jsonify({"error": "Не все обязательные поля заполнены"}), 400
+
+        db = get_db()
+        cursor = db.cursor()
+        cursor.execute("""
+            INSERT INTO listings 
+            (user_id, title, description, game, price, is_exchange, exchange_for, image_url)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        """, (user_id, title, description, game, price, is_exchange, exchange_for, image_url))
+
+        db.commit()
+        return jsonify({"message": "Объявление успешно добавлено", "id": cursor.lastrowid}), 201
