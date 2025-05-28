@@ -1,0 +1,16 @@
+Index: README.md
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+># Group_project\r\nПроект студентов группы ЭУ-201  \r\n
+===================================================================
+diff --git a/README.md b/README.md
+--- a/README.md	(revision 41410cac5c58de1b28f30b037a92186b96c2f308)
++++ b/README.md	(date 1747738520149)
+@@ -1,2 +1,5 @@
+ # Group_project
+-Проект студентов группы ЭУ-201  
++Проект студентов группы ЭУ-201
++
++Поллак Игорь harry1pacman
++Татьяна Ященко TatianaYash
+\ No newline at end of file
