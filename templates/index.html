@@ -103,6 +103,25 @@
     function escapeHtml(text) {
         return text.replace(/[&<>"']/g, function(m) { return {'&':'&amp;', '<':'<', '>':'>', '"':'&quot;', "'":'&#39;'}[m];});
     }
+
+    function markAsCompleted(listingId) {
+    fetch(`http://127.0.0.1:5000/listing/${listingId}`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ is_completed: 1 })
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert("Объявление помечено как выполненное");
+        loadListings(); // Обновляем список
+    })
+    .catch(error => {
+        console.error('Ошибка:', error);
+        alert("Не удалось пометить объявление как выполненное");
+    });
+    }
 </script>
 
 </body>
