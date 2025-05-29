@@ -101,4 +101,3 @@ def create_schema():
 if __name__ == '__main__':
     create_schema()
     init_db()
-    app.run(debug=True)
