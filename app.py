@@ -100,7 +100,7 @@ def create_schema():
 
 
 
-# Роуты для объявлений
+    # Роуты для объявлений
 
 # Получить все объявления
 @app.route('/listings', methods=['GET'])
@@ -188,24 +188,6 @@ def create_listing():
 
     db.commit()
     return jsonify({"message": "Объявление успешно добавлено", "id": cursor.lastrowid}), 20
-
-@app.route('/listing/<int:listing_id>', methods=['PATCH'])
-def update_listing(listing_id):
-    data = request.get_json()
-    is_completed = data.get('is_completed')
-
-    if is_completed not in (0, 1):
-        return jsonify({"error": "Неверное значение is_completed"}), 400
-
-    db = get_db()
-    cursor = db.cursor()
-    cursor.execute("UPDATE listings SET is_completed = ? WHERE id = ?", (is_completed, listing_id))
-    db.commit()
-
-    if cursor.rowcount == 0:
-        return jsonify({"error": "Объявление не найдено"}), 404
-
-    return jsonify({"message": "Статус обновлён", "is_completed": bool(is_completed)}), 200
 
 # Запуск сервера
 if __name__ == '__main__':
