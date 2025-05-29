@@ -16,6 +16,32 @@
             color: #333;
         }
 
+<!-- Форма поиска -->
+<div style="max-width: 600px; margin: 0 auto 30px auto; text-align: center;">
+    <h2>🔍 Поиск объявлений</h2>
+    <form id="search-form">
+        <div style="margin-bottom: 10px;">
+            <input type="text" id="search-title" placeholder="Название объявления" style="width: 80%; padding: 10px;">
+        </div>
+        <div style="margin-bottom: 10px;">
+            <input type="text" id="search-game" placeholder="Игра" style="width: 80%; padding: 10px;">
+        </div>
+        <div style="margin-bottom: 10px;">
+            <select id="search-type" style="width: 80%; padding: 10px;">
+                <option value="">Все типы</option>
+                <option value="sale">Только продажи</option>
+                <option value="exchange">Только обмены</option>
+            </select>
+        </div>
+        <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 20px;">
+            <input type="number" id="price-min" placeholder="Мин. цена" step="any" style="width: 40%; padding: 10px;">
+            <input type="number" id="price-max" placeholder="Макс. цена" step="any" style="width: 40%; padding: 10px;">
+        </div>
+        <button type="submit" style="padding: 10px 20px;">Поиск</button>
+        <button type="button" id="reset-btn" style="margin-left: 10px; padding: 10px 20px; background-color: #6c757d;">Сброс</button>
+    </form>
+</div>
+
         .listings-container {
             display: flex;
             flex-wrap: wrap;
@@ -103,6 +129,74 @@
     function escapeHtml(text) {
         return text.replace(/[&<>"']/g, function(m) { return {'&':'&amp;', '<':'<', '>':'>', '"':'&quot;', "'":'&#39;'}[m];});
     }
+
+    function loadListings() {
+    fetch('http://127.0.0.1:5000/listings')
+        .then(response => response.json())
+        .then(data => {
+            const filtered = filterListings(data);
+            const container = document.getElementById('listings');
+            container.innerHTML = '';
+
+            if (filtered.length === 0) {
+                container.innerHTML = "<p>Ничего не найдено.</p>";
+                return;
+            }
+
+            filtered.forEach(listing => {
+                const card = document.createElement('div');
+                card.className = 'listing-card';
+
+                card.innerHTML = `
+                    <div class="listing-title">${escapeHtml(listing.title)}</div>
+                    <div class="listing-game">Игра: ${escapeHtml(listing.game)}</div>
+                    <div class="listing-price">Цена: ${listing.price ? listing.price + ' руб.' : 'Не указана'}</div>
+                    <div class="listing-exchange">
+                        ${listing.is_exchange ? 'Возможен обмен на: ' + escapeHtml(listing.exchange_for || 'Любой предмет') : 'Продажа'}
+                    </div>
+                    <div class="listing-description">Описание: ${escapeHtml(listing.description)}</div>
+                `;
+
+                container.appendChild(card);
+            });
+        })
+        .catch(error => {
+            console.error('Ошибка загрузки объявлений:', error);
+            document.getElementById('listings').innerHTML = "<p>Ошибка загрузки данных.</p>";
+        });
+}
+
+    // Функция фильтрации
+function filterListings(listings) {
+    const titleFilter = document.getElementById('search-title').value.trim().toLowerCase();
+    const gameFilter = document.getElementById('search-game').value.trim().toLowerCase();
+    const typeFilter = document.getElementById('search-type').value;
+    const priceMin = parseFloat(document.getElementById('price-min').value);
+    const priceMax = parseFloat(document.getElementById('price-max').value);
+
+    return listings.filter(listing => {
+        const matchTitle = listing.title.toLowerCase().includes(titleFilter);
+        const matchGame = listing.game.toLowerCase().includes(gameFilter);
+        const matchType = typeFilter === '' || (typeFilter === 'sale' && !listing.is_exchange) || (typeFilter === 'exchange' && listing.is_exchange);
+        const matchPrice = (!isNaN(priceMin) ? listing.price >= priceMin : true) &&
+                           (!isNaN(priceMax) ? listing.price <= priceMax : true);
+        return matchTitle && matchGame && matchType && matchPrice;
+    });
+}
+
+// Обработчик формы поиска
+document.getElementById('search-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    loadListings();
+});
+
+document.getElementById('reset-btn').addEventListener('click', function() {
+    document.getElementById('search-form').reset();
+    loadListings();
+});
+
+    // Первичная загрузка
+loadListings();
 </script>
 
 </body>
