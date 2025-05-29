@@ -31,9 +31,11 @@
 1. Убедитесь, что установлен Python 3.
 2. Клонируйте репозиторий:
    ```bash
-   git clone https://github.com/ваш-аккаунт/group_project.git 
+   git clone https://github.com/harry1pacman/Group_project.git 
 
 
 Техническое задание: [TECH.md](TECH.md)
-
 Структура БД: [BDstructure.md](BDstructure.md)
+Лицензия: [text](docs/license.txt)
+Репорт:[text](docs/project_report.md)
+Техническая спецификация: [text](docs/Technikal_spec.md)
