@@ -189,6 +189,12 @@ def create_listing():
     db.commit()
     return jsonify({"message": "Объявление успешно добавлено", "id": cursor.lastrowid}), 20
 
+from flask import send_from_directory
+
+@app.route('/')
+def home():
+    return send_from_directory('templates', 'index.html')
+
 # Запуск сервера
 if __name__ == '__main__':
     create_schema()
