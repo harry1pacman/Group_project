@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>🎮 Игровой маркетплейс</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .listings-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .listing-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            width: 300px;
+            padding: 15px;
+        }
+
+        .listing-title {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        .listing-game {
+            color: #007bff;
+            font-weight: bold;
+        }
+
+        .listing-price {
+            color: green;
+            margin-top: 10px;
+        }
+
+        .listing-exchange {
+            color: orange;
+            margin-top: 5px;
+        }
+
+        .listing-description {
+            font-size: 0.9em;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+<h1>🎮 Объявления о продаже и обмене</h1>
+
+<div class="listings-container" id="listings">
+    <!-- Сюда будут добавляться объявления -->
+</div>
+
+<script>
+    // Получаем список объявлений с API
+    fetch('http://127.0.0.1:5000/listings')
+        .then(response => response.json())
+        .then(data => {
+            const container = document.getElementById('listings');
+
+            if (data.length === 0) {
+                container.innerHTML = "<p>Нет объявлений.</p>";
+                return;
+            }
+
+            data.forEach(listing => {
+                const card = document.createElement('div');
+                card.className = 'listing-card';
+
+                card.innerHTML = `
+                    <div class="listing-title">${escapeHtml(listing.title)}</div>
+                    <div class="listing-game">Игра: ${escapeHtml(listing.game)}</div>
+                    <div class="listing-price">Цена: ${listing.price ? listing.price + ' руб.' : 'Не указана'}</div>
+                    <div class="listing-exchange">
+                        ${listing.is_exchange ? 'Возможен обмен на: ' + escapeHtml(listing.exchange_for || 'Любой предмет') : 'Продажа'}
+                    </div>
+                    <div class="listing-description">Описание: ${escapeHtml(listing.description)}</div>
+                `;
+
+                container.appendChild(card);
+            });
+        })
+        .catch(error => {
+            console.error('Ошибка загрузки объявлений:', error);
+            document.getElementById('listings').innerHTML = "<p>Ошибка загрузки данных.</p>";
+        });
+
+    // Функция для безопасного вывода текста (защита от XSS)
+    function escapeHtml(text) {
+        return text.replace(/[&<>"']/g, function(m) { return {'&':'&amp;', '<':'<', '>':'>', '"':'&quot;', "'":'&#39;'}[m];});
+    }
+</script>
+
+</body>
+</html>
