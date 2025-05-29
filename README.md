@@ -4,7 +4,7 @@
 - Поллак Игорь harry1pacman
 - Ященко Татьяна TatianaYash
 - Усков Артем uskovdd
-- Белорукова Юля juliawhitehand
+- Белорукова Юля juliawhitehand 
 
 
 Техническое задание: [TECH.md](TECH.md)
