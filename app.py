@@ -191,4 +191,4 @@ if __name__ == '__main__':
         """, (user_id, title, description, game, price, is_exchange, exchange_for, image_url))
 
         db.commit()
-        return jsonify({"message": "Объявление успешно добавлено", "id": cursor.lastrowid}), 201
+        return jsonify({"message": "Объявление успешно добавлено", "id": cursor.lastrowid}), 20
